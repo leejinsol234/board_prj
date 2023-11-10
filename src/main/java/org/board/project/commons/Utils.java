@@ -12,7 +12,7 @@ public class Utils {
 
     //처음 로드 시 초기화
     static {
-        validationsBundle = ResourceBundle.getBundle("messages.validation");
+        validationsBundle = ResourceBundle.getBundle("messages.validations");
         errorsBundle = ResourceBundle.getBundle("messages.errors");
     }
 
