@@ -12,9 +12,10 @@ public class MemberInfo implements UserDetails {
 
     private String email;
     private String password;
-    private Collection<? extends GrantedAuthority> authorities;
 
-    private Member member; //위의 3가지(email,password,authorities)를 제외한 나머지 추가적인 정보를 담기 위함.
+    private Member member; //(email,password,authorities)를 제외한 나머지 추가적인 정보를 담기 위함.
+
+    private Collection<? extends GrantedAuthority> authorities;
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() { //권한

@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import org.board.project.commons.Utils;
+import org.board.project.entities.Member;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
 
@@ -24,6 +25,11 @@ public class LoginSuccessHandler implements AuthenticationSuccessHandler {
         //session 초기화
         HttpSession session = request.getSession();
         Utils.loginInit(session);
+
+        //로그인 회원 정보 세션 처리 - 편의
+        MemberInfo memberInfo = (MemberInfo) authentication.getPrincipal(); //로그인한 회원 정보 가져오기
+        Member member = memberInfo.getMember();
+        session.setAttribute("loginMember", member);
 
     }
 }

@@ -1,6 +1,7 @@
 package org.board.project.entities;
 
 import lombok.Data;
+import org.board.project.commons.constants.MemberType;
 import org.springframework.data.annotation.Id;
 
 import java.time.LocalDateTime;
@@ -16,4 +17,5 @@ public class Member {
     private String mobile;
     private LocalDateTime regDt;
     private LocalDateTime modDt;
+    private MemberType mtype = MemberType.USER; //일반 회원이 기본값
 }

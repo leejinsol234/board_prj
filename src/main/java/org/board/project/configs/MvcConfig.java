@@ -25,8 +25,14 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addViewControllers(ViewControllerRegistry registry) {
-        //controller 연결 없이
+        //controller 없이 연결하기
         registry.addViewController("/")
+                .setViewName("front/main/index");
+
+        registry.addViewController("/mypage")
+                .setViewName("front/main/index");
+
+        registry.addViewController("/admin")
                 .setViewName("front/main/index");
     }
 
