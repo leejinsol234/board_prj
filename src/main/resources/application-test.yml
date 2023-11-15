@@ -1,0 +1,30 @@
+spring:
+  #데이터베이스 설정
+  datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:test
+    username: sa
+    password:
+
+  #JPA 설정
+  jpa:
+    properties:
+      hibernate:
+        # 실행되는 쿼리를 콘솔에 출력
+        show_sql: true
+        # 출력되는 쿼리를 줄개행 및 들여쓰기 되어 보이도록
+        format_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.H2Dialect
+    hibernate:
+      # 데이터 자동 정의(create : 애플리케이션 시작 시에 기존 테이블 DROP, 새로 생성)
+      ddlAuto: create
+
+#로거 설정
+logging:
+  level:
+    org:
+      hibernate:
+        type:
+          descriptor:
+            sql: trace
