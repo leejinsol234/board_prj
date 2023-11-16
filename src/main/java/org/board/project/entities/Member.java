@@ -6,10 +6,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.board.project.commons.constants.MemberType;
-import org.hibernate.annotations.CreationTimestamp;
-import org.hibernate.annotations.UpdateTimestamp;
-
-import java.time.LocalDateTime;
 
 @Data
 //@Entity(name = "Users")
@@ -22,7 +18,7 @@ import java.time.LocalDateTime;
         @Index(name = "idx_member_mobile", columnList = "mobile")
 })
 @Builder
-public class Member {
+public class Member extends Base{
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long userNo;
@@ -38,14 +34,6 @@ public class Member {
 
     @Column(length = 11)
     private String mobile;
-
-    @CreationTimestamp //쿼리 수행 시점
-    @Column(updatable = false) //(처음에)추가O 수정X
-    private LocalDateTime regDt;
-
-    @UpdateTimestamp //쿼리 수행 시점
-    @Column(insertable = false) //추가X 수정O
-    private LocalDateTime modDt;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10, nullable = false)

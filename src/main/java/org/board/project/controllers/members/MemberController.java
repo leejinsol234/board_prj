@@ -1,30 +1,28 @@
 package org.board.project.controllers.members;
 
+import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.board.project.commons.MemberUtil;
 import org.board.project.commons.Utils;
-import org.board.project.entities.Member;
-import org.board.project.models.member.MemberInfo;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.context.SecurityContextHolder;
+import org.board.project.entities.BoardData;
 import org.springframework.stereotype.Controller;
-
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.security.Principal;
-
 @Controller
 @RequestMapping("/member")
 @RequiredArgsConstructor
 @Slf4j
+@Transactional
 public class MemberController {
 
     private final Utils utils;
     private final MemberUtil memberUtil;
+    private final EntityManager em;
 
     @GetMapping("/join")
     public String join(){
@@ -38,14 +36,25 @@ public class MemberController {
     }
     //로그인한 회원 정보를 조회하는 세 가지 방법
     @GetMapping("/info")
-    @ResponseBody //해당 메서드에만
+    @ResponseBody
     public void info(){
 
-        Member member = memberUtil.getMember();
-        if(memberUtil.isLogin()) {
-            log.info(member.toString());
-        }
-        log.info("로그인 여부: {}",memberUtil.isLogin());
+        BoardData data = BoardData.builder()
+                .subject("제목")
+                .content("내용")
+                .build();
+
+        em.persist(data);
+        em.flush();
+
+        data.setSubject("(수정)제목");
+        em.flush();
+
+//        Member member = memberUtil.getMember();
+//        if(memberUtil.isLogin()) {
+//            log.info(member.toString());
+//        }
+//        log.info("로그인 여부: {}",memberUtil.isLogin());
     }
 
     /*
