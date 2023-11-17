@@ -8,6 +8,7 @@ spring:
 
   #JPA 설정
   jpa:
+    open-in-view: true
     properties:
       hibernate:
         # 실행되는 쿼리를 콘솔에 출력
@@ -18,7 +19,7 @@ spring:
         dialect: org.hibernate.dialect.H2Dialect
     hibernate:
       # 데이터 자동 정의(create : 애플리케이션 시작 시에 기존 테이블 DROP, 새로 생성)
-      ddlAuto: create
+      ddlAuto: update
 
 #로거 설정
 logging:
