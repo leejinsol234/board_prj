@@ -39,6 +39,8 @@ public class Member extends Base{
     @Column(length = 10, nullable = false)
     private MemberType mtype = MemberType.USER; //일반 회원이 기본값
 
+
+
 //    @Transient //db에는 반영되지 않고 entity 내부에서만 사용됨
 //    private String tmpData;
 
