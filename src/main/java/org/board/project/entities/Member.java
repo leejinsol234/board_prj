@@ -1,11 +1,11 @@
 package org.board.project.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import org.board.project.commons.constants.MemberType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Data
 //@Entity(name = "Users")
@@ -38,6 +38,11 @@ public class Member extends Base{
     @Enumerated(EnumType.STRING)
     @Column(length = 10, nullable = false)
     private MemberType mtype = MemberType.USER; //일반 회원이 기본값
+
+    @ToString.Exclude
+    @OneToMany(mappedBy = "member",cascade = CascadeType.REMOVE) //BoardData가 주인(부모).FetchType.LAZY(기본값) -> 항상 BoardData를 조회하는 것은 아니므로
+    //cascade = CascadeType.REMOVE 자식 쪽에서 삭제되면 부모 쪽에서도 삭제되도록 한다.
+    private List<BoardData> items = new ArrayList<>();
 
 //    @Transient //db에는 반영되지 않고 entity 내부에서만 사용됨
 //    private String tmpData;
