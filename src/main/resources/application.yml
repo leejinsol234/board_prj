@@ -22,8 +22,9 @@ spring:
       maxRequestSize: 40MB
 
   # 정적 자원 설정(CSS,JS,image 등)
-  resources:
-    staticLocations: file:src/main/resources/static/
+  web:
+    resources:
+      staticLocations: file:src/main/resources/static/
 
   #live reload 설정(배포시 제거)
   devtools:

@@ -1,21 +1,36 @@
 package org.board.project.entities;
 
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.board.project.commons.constants.MemberType;
-import org.springframework.data.annotation.Id;
-
-import java.time.LocalDateTime;
 
 @Data
-public class Member {
-    @Id
+@Entity
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
+public class Member extends Base{
+
+    @Id @GeneratedValue
     private Long userNo;
 
+    @Column(length = 65, nullable = false, unique = true)
     private String email;
+
+    @Column(length = 65, nullable = false)
     private String password;
+
+    @Column(length = 40,nullable = false)
     private String userNm;
+
+    @Column(length = 11)
     private String mobile;
-    private LocalDateTime regDt;
-    private LocalDateTime modDt;
+
+    @Enumerated(EnumType.STRING)
+    @Column(length = 15, nullable = false)
     private MemberType mtype = MemberType.USER; //일반 회원이 기본값
+
 }
