@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width,user-scalable=yes,initial-scale=1.0,maximum-scale=3.0,minimum-scale=1.0">
+    <meta name="_csrf" th:content="${_csrf.token}">
+    <meta name="_csrf_header" th:content="${_csrf.headerName}">
     <title th:if="${pageTitle != null}" th:text="${pageTitle}"></title>
     <!--관리자,모바일,프론트 공통-->
     <link rel="stylesheet" type="text/css" th:href="@{/common/css/style.css}">
