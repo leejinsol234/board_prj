@@ -10,7 +10,7 @@ import org.springframework.security.web.authentication.AuthenticationFailureHand
 
 import java.io.IOException;
 
-public class LoginFailureHandler implements AuthenticationFailureHandler {
+public class LoginFailureHandler implements AuthenticationFailureHandler { //로그인 실패 시 유입
     @Override
     public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response, AuthenticationException exception) throws IOException, ServletException {
 
@@ -20,9 +20,9 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
         //session 비우기 위한 초기화
         Utils.loginInit(session);
 
-        String email =request.getParameter("email");
+        String email = request.getParameter("email");
         String password = request.getParameter("password");
-        //email 또는 password가
+        //email 또는 password가 입력되지 않았을 때
         boolean isRequiredFieldCheck = false;
 
         session.setAttribute("email",email);
@@ -44,9 +44,8 @@ public class LoginFailureHandler implements AuthenticationFailureHandler {
             session.setAttribute("globalError", Utils.getMessage("Login.fail", "validation"));
         }
 
-
-
-        response.sendRedirect(request.getContextPath()+"/member/login"); //로그인 실패 시 이동할 경로
+        response.sendRedirect(request.getContextPath()+"/member/login");
+        //로그인 실패 시 이동할 경로(로그인 페이지).페이지 이동으로 요청 값이 바뀌므로 값을 유지하는 범위가 더 넓은 session을 사용한다.
     }
 
 

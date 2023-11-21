@@ -12,7 +12,6 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.filter.HiddenHttpMethodFilter;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
@@ -26,19 +25,6 @@ public class MvcConfig implements WebMvcConfigurer {
 
     @Autowired
     private CommonInterceptor commonInterceptor;
-
-    @Override
-    public void addViewControllers(ViewControllerRegistry registry) {
-        //controller 없이 연결하기
-        registry.addViewController("/")
-                .setViewName("front/main/index");
-
-        registry.addViewController("/mypage")
-                .setViewName("front/main/index");
-
-        registry.addViewController("/admin")
-                .setViewName("front/main/index");
-    }
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {

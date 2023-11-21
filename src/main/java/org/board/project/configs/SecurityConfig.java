@@ -1,8 +1,6 @@
 package org.board.project.configs;
 
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.board.project.models.member.LoginFailureHandler;
 import org.board.project.models.member.LoginSuccessHandler;
@@ -11,15 +9,10 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
-import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import java.io.IOException;
 
 @Configuration
 @EnableConfigurationProperties(FileUploadConfig.class)
@@ -33,11 +26,11 @@ public class SecurityConfig {
         //인증 설정 - 로그인 S
         http.formLogin(f -> {
             f.loginPage("/member/login") //post로 넘어갈 실제 페이지
-                    .usernameParameter("email")
-                    .passwordParameter("password")
+                    .usernameParameter("email") // 변경사항(username으로 사용할 속성)
+                    .passwordParameter("password") // password로 사용할 속성
                     .successHandler(new LoginSuccessHandler()) //로그인 성공 시 처리
                     .failureHandler(new LoginFailureHandler()); //로그인 실패 시 처리
-        }); //DSL (Domain-Specific language)
+        }); //DSL (Domain-Specific language) : 기능별로 나눠서 설정하는 데에 람다식이 효율적
         //인증 설정 - 로그인 E
 
         //logout 구현하기 S
@@ -47,7 +40,7 @@ public class SecurityConfig {
         });
         //logout 구현하기 E
 
-        //iframe 차단 해제 S
+        //iframe 차단 해제 S //iframe은 보안 이슈로 막혀있으므로
         http.headers(c ->{
                             //같은 출처일 경우 허용
            c.frameOptions(o -> o.sameOrigin());
@@ -56,9 +49,25 @@ public class SecurityConfig {
 
         /* 인가 설정 - 접근 통제 S */
         http.authorizeHttpRequests(c->{
-            c.requestMatchers("/mypage/**").authenticated() //회원 전용(로그인한 회원만 접근 가능)
-             .requestMatchers("/admin/**").hasAuthority("ADMIN") //hasAuthority() :한 개의 권한만(관리자)
-             .anyRequest().permitAll(); //나머지 페이지는 권한 필요 없음
+            c.requestMatchers("/mypage/**").authenticated() //회원 전용(로그인한 회원만 접근 가능한 주소 설정)
+             //.requestMatchers("/admin/**").hasAuthority("ADMIN") //hasAuthority() :한 개의 권한만(관리자)
+                    .requestMatchers("front/images/**", //권장사항 이슈로 WebSecurityCustomizer에서 이동함.
+                            "/front/css/**",
+                            "/front/js/**",
+
+                            "/mobile/images/**",
+                            "/mobile/css/**",
+                            "/mobile/js/**",
+
+                            "/admin/images/**",
+                            "/admin/css/**",
+                            "/admin/js/**",
+
+                            "/common/css/**",
+                            "/common/js/**",
+                            "/common/images/**",
+                            fileUploadConfig.getUrl()+"**").permitAll()
+                    .anyRequest().permitAll(); //나머지 페이지는 권한 필요 없음
         });
 
         //회원 전용 서비스일 경우 로그인 페이지로 이동하고, 관리자 페이지일 경우 에러 메세지가 보이도록
@@ -76,28 +85,6 @@ public class SecurityConfig {
         /* 인가 설정 - 접근 통제 E */
 
         return http.build();
-    }
-
-    @Bean
-    public WebSecurityCustomizer webSecurityCustomizer(){
-        // 시큐리티 설정이 적용될 필요가 없는 경로 설정(권한과 상관 없음)
-        return w -> w.ignoring().requestMatchers(
-                "front/images/**",
-                "/front/css/**",
-                "/front/js/**",
-
-                "/mobile/images/**",
-                "/mobile/css/**",
-                "/mobile/js/**",
-
-                "/admin/images/**",
-                "/admin/css/**",
-                "/admin/js/**",
-
-                "/common/css/**",
-                "/common/js/**",
-                "/common/images/**",
-                fileUploadConfig.getUrl()+"**"); //파일 경로는 달라질 수 있으므로
     }
 
     @Bean

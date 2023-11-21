@@ -12,20 +12,31 @@ import java.util.ResourceBundle;
 @RequiredArgsConstructor
 public class Utils {
     private static ResourceBundle validationsBundle;
-    private static ResourceBundle errorsBundle;
+    private static ResourceBundle errorsBundle; //MessageSource를 참조함
+    private static ResourceBundle commonsBundle;
+
     private final HttpServletRequest request;
     private final HttpSession session;
-
 
     //처음 로드 시 초기화
     static {
         validationsBundle = ResourceBundle.getBundle("messages.validations");
         errorsBundle = ResourceBundle.getBundle("messages.errors");
+        commonsBundle = ResourceBundle.getBundle("messages.commons"); //팀플 코드에 추가하기!
     }
 
     public static String getMessage(String code, String bundleType) {
+        //메세지 코드 가져오기
         bundleType = Objects.requireNonNullElse(bundleType, "validation");
-        ResourceBundle bundle = bundleType.equals("errors") ? errorsBundle : validationsBundle;
+        ResourceBundle bundle = null;
+        if(bundleType.equals("common")){
+            bundle = commonsBundle;
+        } else if (bundleType.equals("error")) {
+            bundle = errorsBundle;
+        } else {
+            bundle = validationsBundle;
+        }
+
         try{
             return bundle.getString(code);
         } catch (Exception e){
@@ -70,12 +81,13 @@ public class Utils {
      * 복수개 요청 데이터 조회
      *
      */
-    public String[] getParams(String name) {
+    public String[] getParams(String name) { //name값이 여러 개인 경우
         return request.getParameterValues(name);
     }
 
 
     public static int getNumber(int num, int defaultValue) {
+        //페이징 처리 시 기본값 설정
         return num <= 0 ? defaultValue : num;
     }
 
@@ -85,9 +97,9 @@ public class Utils {
      *
      */
     public int guestUid() {
-        String ip = request.getRemoteAddr();
-        String ua = request.getHeader("User-Agent");
+        String ip = request.getRemoteAddr(); //ip 주소
+        String ua = request.getHeader("User-Agent"); //브라우저 정보
 
-        return Objects.hash(ip, ua);
+        return Objects.hash(ip, ua); //비회원 구분과 비회원들의 조회수 카운트 통제를 위해(회원은 회원 정보로)
     }
 }

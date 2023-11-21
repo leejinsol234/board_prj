@@ -30,7 +30,7 @@ public class CommonInterceptor implements HandlerInterceptor {
         //getRequestURI로 주소 가져오기
         String URI = request.getRequestURI();
         if(URI.indexOf("/member/login") == -1){ // /member/login이 아닌 다른 페이지에서 이동할 경우
-            Utils.loginInit(session);
+            Utils.loginInit(session); // 로그인 페이지가 아닌 경우 세션값 비우기
         }
 
     }
