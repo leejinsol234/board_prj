@@ -13,6 +13,21 @@ spring:
     username: PROJECT
     password: _aA123456
 
+  #JPA 설정
+  jpa:
+    properties:
+      hibernate:
+        # 데이터베이스의 키워드 또는 예약어를 엔티티 클래스에 사용하더라도 이슈가 없다.
+        globally_quoted_identifiers: true
+        # 실행되는 쿼리를 콘솔에 출력
+        show_sql: true
+        # 출력되는 쿼리를 줄 개행 및 들여쓰기 되어 보이도록
+        format_sql: true
+        use_sql_comments: true
+        dialect: org.hibernate.dialect.OracleDialect
+    hibernate:
+      # 데이터 정의어 자동 생성
+      ddlAuto: create
 
 
   #파일 업로드 설정

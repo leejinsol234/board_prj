@@ -1,6 +1,7 @@
 package org.board.project.configs;
 
 import org.board.project.commons.interceptors.CommonInterceptor;
+import org.board.project.commons.interceptors.SiteConfigInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.MessageSource;
@@ -26,11 +27,19 @@ public class MvcConfig implements WebMvcConfigurer {
     @Autowired
     private CommonInterceptor commonInterceptor;
 
+    @Autowired
+    private SiteConfigInterceptor siteConfigInterceptor;
+
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(commonInterceptor)
                 .addPathPatterns("/**"); //모든 파일의 경로에서 적용됨.
+
+        registry.addInterceptor(siteConfigInterceptor)
+                .addPathPatterns("/**");
     }
+
+
 
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {

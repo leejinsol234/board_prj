@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.Collection;
 @Data @Builder
-public class MemberInfo implements UserDetails {
+public class MemberInfo implements UserDetails { //관리자가 통제할 수 있도록
 
     private String email;
     private String password;
