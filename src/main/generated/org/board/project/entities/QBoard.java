@@ -31,17 +31,41 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final StringPath category = createString("category");
 
+    public final EnumPath<org.board.project.commons.constants.MemberType> commentAccessRole = createEnum("commentAccessRole", org.board.project.commons.constants.MemberType.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
     //inherited
     public final StringPath createdBy = _super.createdBy;
 
+    public final EnumPath<org.board.project.commons.constants.MemberType> listAccessRole = createEnum("listAccessRole", org.board.project.commons.constants.MemberType.class);
+
+    public final StringPath locationAfterWriting = createString("locationAfterWriting");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> modifiedAt = _super.modifiedAt;
 
     //inherited
     public final StringPath modifiedBy = _super.modifiedBy;
+
+    public final EnumPath<org.board.project.commons.constants.MemberType> replyAccessRole = createEnum("replyAccessRole", org.board.project.commons.constants.MemberType.class);
+
+    public final StringPath skin = createString("skin");
+
+    public final BooleanPath useAttachFile = createBoolean("useAttachFile");
+
+    public final BooleanPath useAttachImage = createBoolean("useAttachImage");
+
+    public final BooleanPath useComment = createBoolean("useComment");
+
+    public final BooleanPath useEditor = createBoolean("useEditor");
+
+    public final BooleanPath useReply = createBoolean("useReply");
+
+    public final EnumPath<org.board.project.commons.constants.MemberType> ViewAccessRole = createEnum("ViewAccessRole", org.board.project.commons.constants.MemberType.class);
+
+    public final EnumPath<org.board.project.commons.constants.MemberType> writeAccessRole = createEnum("writeAccessRole", org.board.project.commons.constants.MemberType.class);
 
     public QBoard(String variable) {
         super(Board.class, forVariable(variable));
