@@ -2,54 +2,51 @@ server:
   port: 3000
 
 spring:
-  #프로필 설정
+  # 프로필 설정
   profiles:
     active: dev
 
-  #데이터베이스 설정
+  # 데이터베이스 설정
   datasource:
     driverClassName: oracle.jdbc.driver.OracleDriver
     url: jdbc:oracle:thin:@localhost:1521:orcl
     username: PROJECT
     password: _aA123456
 
-  #JPA 설정
+  # JPA 설정
   jpa:
     properties:
       hibernate:
-        # 데이터베이스의 키워드 또는 예약어를 엔티티 클래스에 사용하더라도 이슈가 없다.
         globally_quoted_identifiers: true
         # 실행되는 쿼리를 콘솔에 출력
         show_sql: true
-        # 출력되는 쿼리를 줄 개행 및 들여쓰기 되어 보이도록
         format_sql: true
         use_sql_comments: true
         dialect: org.hibernate.dialect.OracleDialect
     hibernate:
-      # 데이터 정의어 자동 생성
       ddlAuto: create
 
-
-  #파일 업로드 설정
+  # 파일 업로드 설정
   servlet:
     multipart:
       maxFileSize: 20MB
       maxRequestSize: 40MB
 
-  # 정적 자원 설정(CSS,JS,image 등)
+  # 정적 자원 설정(CSS, JS, 이미지)
   web:
     resources:
       staticLocations: file:src/main/resources/static/
 
-  #live reload 설정(배포시 제거)
+  # 라이브 리로드 설정
   devtools:
     livereload:
       enabled: true
 
-  # thymeleaf 설정
+  # 타임리프 설정
   thymeleaf:
     cache: false
     prefix: file:src/main/resources/templates/
+
   flyway:
     enabled: true
 
@@ -58,9 +55,11 @@ file:
     path: C:/uploads/
     url: /uploads/
 
-#로거 설정
+# 로거 설정
 logging:
   level:
     org:
-      springframework:
-        jdbc: trace
+      hibernate:
+        type:
+          descriptor:
+            sql: trace

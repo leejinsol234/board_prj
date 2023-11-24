@@ -29,7 +29,7 @@ input[type='checkbox']:checked~label { background:url("../../common/images/chk-o
 
 input[type='radio'] { display: none; }
 input[type='radio']~label { min-height: 24px; line-height: 1; padding: 3px 0 3px 25px; background:url("../../common/images/radio-off.png") no-repeat left center; }
-input[type='radio']:checked+label { background:url("../../common/images/radio-on.png") no-repeat left center; }
+input[type='radio']:checked~label { background:url("../../common/images/radio-on.png") no-repeat left center; }
 
 .dn { display: none !important; }
 

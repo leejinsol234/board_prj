@@ -2,6 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{mobile/layouts/main}">
+
 <main layout:fragment="content">
     <form method="post" th:action="@{/member/login}">
         <div class="rows">
@@ -12,7 +13,6 @@
         </div>
         <button type="submit" th:text="#{로그인}"></button>
     </form>
-
 </main>
 
 </html>
