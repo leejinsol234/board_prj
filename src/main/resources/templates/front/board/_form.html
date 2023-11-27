@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <th:block th:fragment="common" th:object="${boardForm}">
+
         <dl>
             <dt>제목</dt>
             <dd>
@@ -8,7 +9,6 @@
                 <div class="error" th:each="err : ${#fields.errors('subject')}" th:text="${err}"></div>
             </dd>
         </dl>
-
         <dl>
             <dt>작성자</dt>
             <dd>
@@ -16,7 +16,6 @@
                 <div class="error" th:each="err : ${#fields.errors('poster')}" th:text="${err}"></div>
             </dd>
         </dl>
-
         <dl>
             <dt>내용</dt>
             <dd>
@@ -25,5 +24,4 @@
             </dd>
         </dl>
     </th:block>
-
 </html>

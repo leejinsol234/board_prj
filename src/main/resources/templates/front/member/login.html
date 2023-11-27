@@ -1,10 +1,11 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{front/layouts/main}">
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{front/layouts/main}">
+
 <main layout:fragment="content">
     <form method="post" th:action="@{/member/login}">
-        <input th:if="${redirectUrl != null}" type="hidden" name="redirectUrl" th:value="${redirectUrl}">
+        <input th:if="${redirectURL != null}" type="hidden" name="redirectURL" th:value="${redirectURL}">
         <div class="rows">
             <input type="text" name="email" th:placeholder="#{이메일}" th:value="${session.email}">
             <div class="error" th:if="${session.NotBlank_email != null}" th:text="${session.NotBlank_email}"></div>
@@ -15,8 +16,7 @@
         </div>
         <button type="submit" th:text="#{로그인}"></button>
         <div class="error" th:if="${session.globalError != null}" th:text="${session.globalError}"></div>
-     </form>
-
+    </form>
 </main>
 
 </html>
