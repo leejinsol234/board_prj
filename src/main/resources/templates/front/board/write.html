@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+        xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{front/layouts/main}">
+<main layout:fragment="content">
+    <form name="frmSave" method="post" th:action="@{/board/save}" autocomplete="off">
+        <input type="hidden" name="mode" value="write">
+        <input type="hidden" name="bId" value="">
+
+        <th:blcok th:replace="~{front/board/_form::common}"></th:blcok>
+        <div class="btn">
+            <button type="reset">다시 입력</button>
+            <button type="submit">작성하기</button>
+        </div>
+    </form>
+</main>
+
+
+</html>

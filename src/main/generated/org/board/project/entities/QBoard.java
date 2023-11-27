@@ -23,7 +23,7 @@ public class QBoard extends EntityPathBase<Board> {
 
     public final BooleanPath active = createBoolean("active");
 
-    public final EnumPath<org.board.project.commons.constants.BoardAuthority> authority = createEnum("authority", org.board.project.commons.constants.BoardAuthority.class);
+    public final EnumPath<org.board.project.commons.constants.MemberType> authority = createEnum("authority", org.board.project.commons.constants.MemberType.class);
 
     public final StringPath bId = createString("bId");
 

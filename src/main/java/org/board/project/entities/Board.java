@@ -5,8 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.board.project.commons.constants.BoardAuthority;
 import org.board.project.commons.constants.MemberType;
+
 
 @Entity
 @Data
@@ -26,7 +26,7 @@ public class Board extends BaseMember{
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10, nullable = false)
-    private BoardAuthority authority = BoardAuthority.ALL;
+    private MemberType authority = MemberType.ALL;
 
     @Lob
     private String category; //게시판 분류
