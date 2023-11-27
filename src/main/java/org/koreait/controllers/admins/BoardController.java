@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.koreait.commons.ScriptExceptionProcess;
 import org.koreait.commons.menus.Menu;
-import org.koreait.models.board.config.BoardConfigInfoService;
 import org.koreait.models.board.config.BoardConfigSaveService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -21,8 +20,6 @@ public class BoardController implements ScriptExceptionProcess {
 
     private final HttpServletRequest request;
     private final BoardConfigSaveService saveService;
-    private final BoardConfigInfoService boardConfigInfoService;
-
 
     @GetMapping
     public String list(Model model) {
