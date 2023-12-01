@@ -10,7 +10,7 @@ import org.koreait.commons.constants.BoardAuthority;
 @Entity
 @Data @Builder
 @NoArgsConstructor @AllArgsConstructor
-public abstract class Board extends BaseMember {
+public class Board extends BaseMember {
 
     @Id
     @Column(length=30)

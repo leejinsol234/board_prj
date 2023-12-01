@@ -10,7 +10,6 @@ import org.koreait.commons.menus.Menu;
 import org.koreait.entities.Board;
 import org.koreait.models.board.config.BoardConfigInfoService;
 import org.koreait.models.board.config.BoardConfigSaveService;
-import org.koreait.models.board.config.BoardNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.Errors;
