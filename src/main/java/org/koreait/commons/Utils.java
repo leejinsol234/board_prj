@@ -72,6 +72,7 @@ public class Utils {
     /**
      * 단일 요청 데이터 조회
      */
+    //목록에 있는 데이터를 편하게 사용하기 위한 getParam
     public String getParam(String name) {
         return request.getParameter(name);
     }

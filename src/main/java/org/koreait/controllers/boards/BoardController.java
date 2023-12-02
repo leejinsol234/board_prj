@@ -5,15 +5,22 @@ import lombok.RequiredArgsConstructor;
 import org.koreait.commons.MemberUtil;
 import org.koreait.commons.ScriptExceptionProcess;
 import org.koreait.commons.Utils;
+import org.koreait.commons.constants.BoardAuthority;
+import org.koreait.commons.exceptions.AlertBackException;
+import org.koreait.entities.Board;
 import org.koreait.entities.BoardData;
 import org.koreait.models.board.BoardInfoService;
 import org.koreait.models.board.BoardSaveService;
+import org.koreait.models.board.config.BoardConfigInfoService;
+import org.koreait.models.board.config.BoardNotFoundException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.util.StringUtils;
 import org.springframework.validation.Errors;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -25,16 +32,25 @@ public class BoardController implements ScriptExceptionProcess {
     private final MemberUtil memberUtil;
     private final BoardSaveService saveService;
     private final BoardInfoService infoService;
+    private final BoardConfigInfoService configInfoService;
 
     @GetMapping("/write/{bId}")
-    public String write(@PathVariable("bId") String bId, @ModelAttribute  BoardForm form, Model model) {
+    public String write(@PathVariable("bId") String bId, @ModelAttribute BoardForm form, Model model) {
         commonProcess(bId, "write", model);
+
+        if(memberUtil.isLogin()){
+            form.setPoster(memberUtil.getMember().getUserNm()); //로그인 상태일 때는 회원명이 보일 수 있도록
+        }
+
+        form.setBId(bId);
 
         return utils.tpl("board/write");
     }
 
     @GetMapping("/update/{seq}")
     public String update(@PathVariable("seq") Long seq, Model model) {
+
+
         return utils.tpl("board/update");
     }
 
@@ -65,16 +81,58 @@ public class BoardController implements ScriptExceptionProcess {
     }
 
     @GetMapping("/delete/{seq}")
-    public String delete(@PathVariable Long seq) {
+    public String delete(@PathVariable("seq") Long seq) {
 
         return "redirect:/board/list/게시판 ID";
     }
 
+    @GetMapping("/list/{bId}")
+    public String list(@PathVariable("bId") String bId, Model model){
+        return utils.tpl("board/list");
+    }
+
     private void commonProcess(String bId, String mode, Model model) {
-        String pageTitle = "게시글 목록";
-        if (mode.equals("write")) pageTitle = "게시글 작성";
-        else if (mode.equals("update")) pageTitle = "게시글 수정";
+
+        Board board = configInfoService.get(bId);
+
+
+        if(board == null || !board.isActive() && !memberUtil.isAdmin()){ // 등록되지 않았거나 미사용 중인 게시판 일 때(단, 관리자일 때는 미사용 중인 게시판이어도 볼 수 있도록)
+            throw new BoardNotFoundException();
+        }
+
+        /* 게시판 분류 S */
+        String category = board.getCategory();
+        List<String> categories = StringUtils.hasText(category) ?
+                Arrays.stream(category.trim().split("\\n")) //줄 개행 문자로 자르기(윈도우즈에서만)
+                        .map(s -> s.replaceAll("\\r","")) //null값 제거
+                        .toList()
+                : null;
+
+        model.addAttribute("categories",categories);
+        /* 게시판 분류 E */
+
+        String bName = board.getBName();
+
+        String pageTitle = bName;
+        if (mode.equals("write")) pageTitle = bName + "작성";
+        else if (mode.equals("update")) pageTitle = bName + "수정";
         else if (mode.equals("view")) pageTitle = "게시글 제목";
+
+
+        /* 글쓰기, 수정 시 권한 체크 S */
+        if(mode.equals("write") || mode.equals("update")) {
+            BoardAuthority authority = board.getAuthority();
+            //회원 전용
+            if (!memberUtil.isAdmin() && !memberUtil.isLogin() && authority == BoardAuthority.MEMBER) {
+                throw new AlertBackException(Utils.getMessage("MemberOnly.board", "error"));
+            }
+
+            //관리자 전용
+            if (authority == BoardAuthority.ADMIN && !memberUtil.isAdmin()) {
+                throw new AlertBackException(Utils.getMessage("AdminOnly.board", "error"));
+            }
+        }
+        /* 글쓰기, 수정 시 권한 체크 E */
 
         List<String> addCommonScript = new ArrayList<>();
         List<String> addScript = new ArrayList<>();

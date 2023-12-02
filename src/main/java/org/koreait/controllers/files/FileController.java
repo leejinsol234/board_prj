@@ -16,10 +16,10 @@ public class FileController {
     private final FileDeleteService deleteService;
 
     @RequestMapping("/delete/{id}")
-    public String delete(@PathVariable Long id, Model model) {
+    public String delete(@PathVariable("id") Long id, Model model) {
         deleteService.delete(id);
 
-        /** 파일 삭제 성공시 콜백 함수 처리 */
+        /* 파일 삭제 성공시 콜백 함수 처리 */
         String script = String.format("if(typeof parent.fileDeleteCallback == 'function') parent.fileDeleteCallback(%d);", id);
         model.addAttribute("script", script);
         return "common/_execute_script";

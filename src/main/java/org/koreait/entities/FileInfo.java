@@ -21,8 +21,10 @@ public class FileInfo extends BaseMember {
     @Id
     @GeneratedValue
     private Long id;
+
     @Column(length=45, nullable = false)
     private String gid = UUID.randomUUID().toString();
+
     @Column(length=45)
     private String location;
 

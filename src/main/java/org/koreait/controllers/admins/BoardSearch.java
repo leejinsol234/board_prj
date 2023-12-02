@@ -2,6 +2,8 @@ package org.koreait.controllers.admins;
 
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 public class BoardSearch {
     private int page = 1;
@@ -9,4 +11,6 @@ public class BoardSearch {
 
     private String sopt; // 검색 조건
     private String skey; // 검색 키워드
+    private List<Boolean> active; // 활성화 여부
+    private List<String> authority; // 권한
 }
