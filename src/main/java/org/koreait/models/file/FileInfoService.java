@@ -26,7 +26,6 @@ public class FileInfoService {
     @Value("${file.upload.url}")
     private String uploadUrl; // 파일 업로드 url
 
-
     private final HttpServletRequest request; // HTTP 요청 객체
     private final FileInfoRepository repository; // 파일 정보 레포지토리
 

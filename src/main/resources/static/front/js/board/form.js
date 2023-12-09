@@ -8,6 +8,11 @@ window.addEventListener("DOMContentLoaded", function() {
     .catch(err => console.error(err));
 });
 
+/*이미지 본문 추가 이벤트 처리*/
+const insertEditors = document.getElementByClassName("insert_editor");
+for(const el of insertEditors){
+    el.addEventListener("click", (e)=> insertEditor(e.currentTarget.dataset.url));
+}
 
 /*파일 업로드 콜백 처리*/
 function fileUploadCallback(files){
