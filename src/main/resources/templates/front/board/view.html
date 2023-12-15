@@ -17,7 +17,7 @@
         </div>
     </div>
     <div class="content" th:utext="*{content}"></div>
-    <ul th:if="*{attachFiles} != null && {!attachFiles.isEmpty()}">
+    <ul th:if="*{attachFiles != null && !attachFiles.isEmpty()}">
         <li th:each="file,status : *{attachFiles}" th:object="${file}">
             Download #<th:block th:text="${status.count}"></th:block>
             <a th:href="@{/file/download/{id}(id=*{id})}" th:text="*{fileName}"></a>

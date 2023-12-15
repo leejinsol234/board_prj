@@ -13,8 +13,9 @@
         <li th:if="${items == null || items.isEmpty()}" th:text="#{조회된_게시글이_없습니다.}"></li>
         <li th:unless="${items == null || items.isEmpty()}" th:each="item : ${items}" th:object="${item}">
             <a th:href="@{/board/view/{seq}(seq=*{seq})}">
-                <div class="subject" th:text="*{subject}"></div>
+<!--                <div class="subject" th:text="*{subject}"></div>-->
                 <div class="post_info">
+                    <span class="subject" th:text="*{subject}"></span>
                     <span class="poster">
                         <th:block th:text="*{poster}"></th:block>
                         <th:block th:if="*{member != null}" th:text="*{'(' + member.email + ')'}"></th:block>
