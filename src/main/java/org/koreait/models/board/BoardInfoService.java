@@ -18,9 +18,15 @@ import org.koreait.controllers.admins.BoardSearch;
 import org.koreait.controllers.boards.BoardDataSearch;
 import org.koreait.controllers.boards.BoardForm;
 import org.koreait.entities.*;
+import org.koreait.models.comment.CommentInfoService;
 import org.koreait.models.file.FileInfoService;
 import org.koreait.repositories.BoardDataRepository;
+import org.koreait.repositories.BoardViewRepository;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -28,22 +34,58 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Objects;
 
+import static org.springframework.data.domain.Sort.Order.desc;
+
 @Service
 @RequiredArgsConstructor
 public class BoardInfoService {
 
     private final BoardDataRepository boardDataRepository;
+    private final BoardViewRepository boardViewRepository;
     private final FileInfoService fileInfoService;
     private final EntityManager em;
     private final HttpServletRequest request;
     private final MemberUtil memberUtil;
     private final HttpSession session;
     private final PasswordEncoder encoder;
+    private final Utils utils;
+    private final CommentInfoService commentInfoService;
 
+    /*조회수 Uid
+    *   비회원 - Utils::guestUid() : ip + User-Agent(브라우저 종류)
+    *   회원 - 회원 번호
+    * */
+    public int viewUid(){
+        return memberUtil.isLogin() ? memberUtil.getMember().getUserNo().intValue() : utils.guestUid();
+    }
+
+    /*게시글별 조회수 업데이트*/
+    public void updateView(Long seq){
+        //조회 기록 추가
+        try {
+            BoardView boardView = new BoardView();
+            boardView.setSeq(seq);
+            boardView.setUid(viewUid());
+
+            boardViewRepository.saveAndFlush(boardView); //기본키가 두 번 추가되므로 오류 발생을 try-catch로 잡아준다.
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        //게시글 별 총 조회수 산출
+        QBoardView boardView = QBoardView.boardView;
+        long cnt = boardViewRepository.count(boardView.seq.eq(seq));
+
+        //게시글 데이터에 업데이트(viewCnt)
+        BoardData data = boardDataRepository.findById(seq).orElse(null);
+        if(data == null) return;
+        data.setViewCnt((int)cnt);
+        boardDataRepository.flush();
+    }
     public BoardData get(Long seq) {
 
         BoardData data = boardDataRepository.findById(seq).orElseThrow(BoardDataNotFoundException::new);
-
+        data.setComments(commentInfoService.getList(data.getSeq()));
         addFileInfo(data);
 
         return data;
@@ -163,5 +205,15 @@ public class BoardInfoService {
         return encoder.matches(password, guestPw); //사용자가 입력한 비밀번호, db에 저장되어있는 비밀번호w
     }
 
+    public List<BoardData> getList(String bId, int num){
+
+        QBoardData boardData = QBoardData.boardData;
+        num = Utils.getNumber(num, 10);
+        Pageable pageable = PageRequest.of(0, num, Sort.by(desc("createdAt")));
+
+        Page<BoardData> data = boardDataRepository.findAll(boardData.board.bId.eq(bId), pageable);
+
+        return data.getContent();
+    }
 
 }

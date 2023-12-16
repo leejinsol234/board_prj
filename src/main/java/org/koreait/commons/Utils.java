@@ -4,9 +4,10 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.Errors;
 
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
 @Component
 @RequiredArgsConstructor
@@ -100,5 +101,30 @@ public class Utils {
         String ua = request.getHeader("User-Agent");
 
         return Objects.hash(ip, ua);
+    }
+
+    public static Map<String, List<String>> getMessages(Errors errors) {
+        try {
+            Map<String, List<String>> data = new HashMap<>();
+            for (FieldError error : errors.getFieldErrors()) {
+                String field = error.getField();
+                List<String> messages = Arrays.stream(error.getCodes()).sorted(Comparator.reverseOrder()) //범위가 좁은 것부터 적용되도록 하기 위해 역정렬
+                        .map(c -> getMessage(c, "validation"))
+                        .filter(c -> c != null)
+                        .toList();
+
+                data.put(field, messages);
+            }
+
+            return data;
+
+        } catch (Exception e) {
+            return null;
+        }
+    }
+    public String nl2br(String str){
+        return str.replaceAll("\\r","")
+                .replaceAll("\\n","<br");
+
     }
 }

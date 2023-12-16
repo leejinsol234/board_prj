@@ -29,7 +29,6 @@
         </div>
 
         <div class="rows">
-
             <input type="checkbox" name="agree" value="true" id="agree" th:field="*{agree}">
             <label for="agree" th:text="#{회원가입_약관에_동의합니다.}"></label>
             <div class="error" th:each="err : ${#fields.errors('agree')}" th:text="${err}"></div>
