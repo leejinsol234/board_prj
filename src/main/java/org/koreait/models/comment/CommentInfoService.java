@@ -41,6 +41,7 @@ public class CommentInfoService {
 
         return comment;
     }
+
     public CommentForm getForm(Long seq){
         CommentData comment = get(seq);
         CommentForm form = new ModelMapper().map(comment, CommentForm.class);
@@ -85,26 +86,27 @@ public class CommentInfoService {
         Member commentMember = data.getMember();
 
         if(commentMember == null) { //비회원 작성
-            String key = "chk_comment" + seq;
+            String key = "chk_comment_" + seq;
             if(session.getAttribute(key) == null){ //비회원 비밀번호 확인 전
-                session.setAttribute("comment_seq",seq);
+                session.setAttribute("comment_seq", seq);
                 throw new RequiredPasswordCheckException();
             }
 
-        } else {
+        } else { //로그인 상태에서 작성
             if(!memberUtil.isLogin() || commentMember.getUserNo().longValue() != memberUtil.getMember().getUserNo().longValue()){
-                throw new AlertBackException(Utils.getMessage("작성한_댓글만_수정_삭제가 가능합니다.", "error"));
+                throw new AlertBackException(Utils.getMessage("작성한_댓글만_수정_삭제가_가능합니다.", "error"));
             }
         }
     }
-    //수정, 삭제 가능 여부
+    //수정, 삭제 가능 여부(버튼 노출 여부 결정)
     public boolean isEditable(CommentData comment){
         Member commentMember = comment.getMember();
         if(memberUtil.isAdmin() || commentMember == null){ //관리자이거나 비회원 댓글이면 무조건 노출
             return true;
         }
+        //회원 댓글이면 직접 작성한 댓글만 노출
         if(memberUtil.isLogin() && commentMember != null && commentMember.getUserNo().longValue() == memberUtil.getMember().getUserNo().longValue()){
-            return false;
+            return true;
         }
         return false;
     }

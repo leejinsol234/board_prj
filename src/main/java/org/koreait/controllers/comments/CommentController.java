@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.koreait.commons.ScriptExceptionProcess;
 import org.koreait.commons.Utils;
 import org.koreait.commons.exceptions.AlertBackException;
+import org.koreait.commons.exceptions.AlertException;
 import org.koreait.entities.BoardData;
 import org.koreait.models.board.RequiredPasswordCheckException;
 import org.koreait.models.comment.CommentDeleteService;
@@ -26,8 +27,8 @@ public class CommentController implements ScriptExceptionProcess {
 
     private final CommentSaveService saveService;
     private final CommentDeleteService deleteService;
-    private final Utils utils;
     private final CommentInfoService infoService;
+    private final Utils utils;
 
     @GetMapping("/update/{seq}")
     public String update(@PathVariable("seq") Long seq, Model model){
@@ -52,7 +53,7 @@ public class CommentController implements ScriptExceptionProcess {
         if (errors.hasErrors()) {
             Map<String, List<String>> messages = Utils.getMessages(errors);
             String message = (new ArrayList<List<String>>(messages.values())).get(0).get(0);
-            throw new AlertBackException(message); //메세지가 순서대로 보여지도록 하기 위해
+            throw new AlertException(message); //메세지가 순서대로 보여지도록 하기 위해
         }
 
 
@@ -74,7 +75,7 @@ public class CommentController implements ScriptExceptionProcess {
 
         BoardData boardData = deleteService.delete(seq);
 
-        return "redirect:/board/view/" +boardData.getSeq() + "#commnet";
+        return "redirect:/board/view/" + boardData.getSeq() + "#comments";
     }
 
     @ExceptionHandler(RequiredPasswordCheckException.class)
